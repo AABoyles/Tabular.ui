@@ -1,0 +1,98 @@
+html {
+	font-family: sans-serif;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	height: 100%;
+	width: 100%;
+}
+body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	overflow-y: scroll;
+	overflow-x: scroll;
+}
+noscript h1 {
+	text-align: center;
+}
+header {
+	position: fixed;
+	top:0;
+	width: 100%;
+	height: 40px;
+	text-align:center;
+	background-color: #f6f6f5;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #e2e2e0;
+}
+#title {
+	font-size:2em;
+	text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+}
+#upload, #download {
+	float:left;
+}
+#github {
+	float:right;
+}
+#upload, #download, #github {
+	margin: 7px;
+}
+#content {
+	width: 100%;
+	display: none;
+	min-height: calc(100% - 70px);
+	margin-top: 45px;
+	margin-bottom: 20px;
+}
+table {
+	border-collapse: collapse;
+	width: 100% !important;
+}
+th, td {
+	border: 1px solid black;
+	padding: 0;
+	width: 12px;
+}
+tr.result-row:hover {
+	background: #ffff00;
+}
+.selected {
+	background: #ffff77;
+}
+td {
+	background: none;
+}
+td input, select {
+	height:100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: 0;
+	border-radius: 0;
+}
+a {
+	text-decoration: none
+}
+.ui-widget {
+	font-size: .8em;
+	/*padding: 4px;*/
+}
+.ui-front {
+	z-index: 1000000;
+}
+footer {
+	position: fixed;
+	width: 100%;
+	bottom: 0px;
+	text-align: center;
+	background-color: #f6f6f5;
+	border-top: 1px solid #e2e2e0;
+}
+footer a {
+	color: #000000;
+}
+footer a:hover {
+	color: #0000FF;
+}
