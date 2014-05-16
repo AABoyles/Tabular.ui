@@ -32,10 +32,10 @@ header {
 #upload, #download {
 	float:left;
 }
-#github {
+#github, #about {
 	float:right;
 }
-#upload, #download, #github {
+#upload, #download, #github, #about {
 	margin: 7px;
 }
 #content {
@@ -47,15 +47,23 @@ header {
 }
 table {
 	border-collapse: collapse;
-	width: 100% !important;
+	min-width: 150%;
+	min-height: 150%;
+}
+th {
+	background: #f2f5f6;
+	background: -moz-linear-gradient(top,  #f2f5f6 31%, #e3eaed 62%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(31%,#f2f5f6), color-stop(62%,#e3eaed));
+	background: -webkit-linear-gradient(top,  #f2f5f6 31%,#e3eaed 62%);
+	background: -o-linear-gradient(top,  #f2f5f6 31%,#e3eaed 62%);
+	background: -ms-linear-gradient(top,  #f2f5f6 31%,#e3eaed 62%);
+	background: linear-gradient(to bottom,  #f2f5f6 31%,#e3eaed 62%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f5f6', endColorstr='#e3eaed',GradientType=0 );
 }
 th, td {
 	border: 1px solid black;
 	padding: 0;
-	width: 12px;
-}
-tr.result-row:hover {
-	background: #ffff00;
+	min-width: 53px;
 }
 .selected {
 	background: #ffff77;
@@ -95,4 +103,7 @@ footer a {
 }
 footer a:hover {
 	color: #0000FF;
+}
+#aboutcontent {
+	display: none;
 }
