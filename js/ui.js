@@ -34,92 +34,83 @@ yepnope({
 	],
 	callback : {
 		"jquery-2.1.0.min.js": function(){
-			addRows = function(addRows){
+			newCell = $("<td>").click(function(){
+				$("td").removeClass("selected");
+				$(this).addClass("selected");
+			}).dblclick(function(){
+				var cell = $(this);
+				var tmp = cell.text();
+				cell.empty().append($("<input type='text' value='"+tmp+"' />").keydown(function(evt){
+					if(evt.keyCode==13){
+						cell.empty().text(evt.target.value);
+					};
+				})).children().focus();
+				cell.children().focusout(function(evt){
+					cell.empty().text(evt.target.value);
+				});
+			});
+
+			addRow = function(){
 				var numRows = $("tr").length;
 				var numCols = $("thead th").length;
-				for(var i = 0; i < addRows; i++){
-					newRow = $("<tr>").append("<th>" + numRows++ + "</th>");
-					for(var j = 1; j < numCols; j++){
-						newRow.append($("<td>").click(function(){
-							$("td").removeClass("selected");
-							$(this).addClass("selected");
-						}).dblclick(function(){
-							var cell = $(this);
-							cell.empty().append($("<input type='text' value='"+cell.text()+"'/>").keydown(function(evt){
-								if(evt.keyCode==13){
-									cell.empty().text(evt.target.value);
-								};
-							}));
-							cell.children().focus();
-							cell.children().focusout(function(evt){
-								cell.empty().text(evt.target.value);
-							});
-						}));
-					}
-					$("tbody").append(newRow);
+				newRow = $("<tr>").append("<th>" + numRows++ + "</th>");
+				for(var j = 1; j < numCols; j++){
+					newRow.append(newCell.clone(true));
 				}
+				$("tbody").append(newRow);
 			};
-			
-			addCols = function(addCols){
-				numcols = $("thead th").length;
+
+			addCol = function(){
+				var j = $("thead th").length;
 				$("tr").each(function(i, row){
-					for(var j = numcols; j < numcols + addCols; j++){
-						if(i==0){
-							$(row).append("<th>" + ab[Math.floor(j/26)-1] + ab[(j-1)%26] + "</th>");
+					if(i==0){
+						if(j <= 702){
+							$(row).append("<th>" + ab[Math.ceil(j/26)-2] + ab[(j-1)%26] + "</th>");
 						} else {
-							$(row).append($("<td>").click(function(){
-								$("td").removeClass("selected");
-								$(this).addClass("selected");
-							}).dblclick(function(){
-								var cell = $(this);
-								cell.empty().append($("<input type='text' value='"+cell.text()+"'/>").keydown(function(evt){
-									if(evt.keyCode==13){
-										cell.empty().text(evt.target.value);
-									};
-								}));
-								cell.children().focus();
-								cell.children().focusout(function(evt){
-									cell.empty().text(evt.target.value);
-								});
-							}));
+							$(row).append("<th>" + ab[Math.ceil(j/702)-2] + ab[Math.ceil(j%702/26)-1] + ab[(j-1)%26] + "</th>");
 						}
+					} else {
+						$(row).append(newCell.clone(true));
 					}
-					$("tbody").append(newRow);
 				});
 			};
 			
 			var table = $("table");
-			if(table.height() < 2*window.innerHeight){
-				var rows = Math.ceil((2*window.innerHeight - table.height())/12);
-				addRows(rows);
-			}
-			if(table.width() < 2*window.innerWidth){
-				var cols = Math.ceil((2*window.innerWidth - table.width())/150);
-				addCols(cols);
+			for(var i = 0; i < 100; i++){
+				addRow();
+				addCol();
 			}
 
-			$(window).scroll(function(evt){
-				if((window.scrollY+window.innerHeight)/window.outerHeight > .8){
-					addRows(20);
+			$(window).scroll(function(){
+				if(window.pageYOffset/$(document).height() > .5){
+					addRow();
 				}
-				if((window.scrollX+window.innerWidth)/window.outerWidth > .8){
-					addCols(10);
+				if(window.pageXOffset/$(document).width() > .5){
+					addCol();
 				}
 			});
-			
+
 			$(window).keydown(function(evt){
 				var cell = $("td.selected");
-				if(evt.keycode==113 && cell.length>0){
-					var extant = cell.text();
-					cell.empty().append($("<input type='text' />").val(extant).keydown(function(evt){
-						if(evt.keyCode==13){
-							cell.empty().text(evt.target.value);
-						};
-					}));
-					cell.children().focus();
-					cell.children().focusout(function(evt){
-						cell.empty().text(evt.target.value);
-					});
+				switch(evt.keyCode){
+					case 34:
+						for(var i=0; i < 30; i++){
+							addRow();
+						}
+					break;
+					case 113:
+						if(cell.length>0){
+							var extant = cell.text();
+							cell.empty().append($("<input type='text' value='"+extant+"'/>").keydown(function(evt){
+							if(evt.keyCode==13){
+								cell.empty().text(evt.target.value);
+							};
+							})).children().focus();
+							cell.children().focusout(function(evt){
+								cell.empty().text(evt.target.value);
+							});
+						}
+					break;
 				}
 			});
 
