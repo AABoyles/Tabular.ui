@@ -1,7 +1,6 @@
 var noscript = document.getElementsByTagName("noscript")[0];
 noscript.parentNode.removeChild(noscript);
 
-currentRequest = {};
 spinner = {
 	lines : 13, // The number of lines to draw
 	length : 100, // The length of each line
