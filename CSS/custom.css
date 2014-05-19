@@ -39,11 +39,10 @@ header {
 	margin: 7px;
 }
 #content {
-	width: 100%;
 	display: none;
-	min-height: calc(100% - 70px);
+	min-width: 100%;
+	min-height: 100%;
 	margin-top: 45px;
-	margin-bottom: 20px;
 }
 table {
 	border-collapse: collapse;
@@ -104,6 +103,6 @@ footer a {
 footer a:hover {
 	color: #0000FF;
 }
-#aboutcontent {
+#aboutcontent, #uploadcontent {
 	display: none;
 }
