@@ -16,6 +16,7 @@
 			<a id="new" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-disabled ui-state-disabled ui-button-text-only" role="button" aria-disabled="true">New</a>
 			<a id="upload" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-disabled ui-state-disabled ui-button-text-only" role="button" aria-disabled="true">Open</a>
 			<a id="download" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-disabled ui-state-disabled ui-button-text-only" download="output.csv" role="button" aria-disabled="true">Save As</a>
+			<span id="filename" contenteditable="true">NewFile.csv</span>
 			<span id="title">Tabular</span>
 			<a id="github" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-disabled ui-state-disabled ui-button-text-only" role="button" href="https://github.com/AABoyles/Tabular.ui">Fork me on Github</a>
 			<a id="about" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-disabled ui-state-disabled ui-button-text-only" role="button">About</a>
@@ -60,12 +61,13 @@
 		<footer>
 			
 		</footer>
+		<div id='newcontent' title='Please Confirm'>Are you certain you want to close the current spreadsheet and create a new one?</div>
+		<div id="uploadcontent" title="Upload">
+			<input id="uploadfile" type="file" accept="text/csv" />
+		</div>
 		<div id="aboutcontent" title="About Tabular">
 			<a href="http://github.com/aaboyles/Tabular.ui" style="font-size: 2em" target="_blank">Tabular</a> v.0.1.0 by <a href="http://aaboyles.com/" target="_blank">Tony Boyles</a>
 			<p>A Simple, Browser-based Spreadsheet editor.</p>
-		</div>
-		<div id="uploadcontent" title="Upload">
-			<input id="uploadfile" type="file" accept="text/csv" />
 		</div>
 		<script type="application/javascript" src="js/ui.js"></script>
 	</body>

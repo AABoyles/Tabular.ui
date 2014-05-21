@@ -26,17 +26,12 @@ yepnope({
 		"jquery-2.1.0.min.js": function(){
 			app.newCell = function(){
 				return $("<td>").click(function(){
-					$("td").removeClass("selected");
+					$(".selected").removeClass("selected");
 					$(this).addClass("selected");
 				}).dblclick(function(){
-					var cell = $(this);
-					var tmp = cell.text();
-					cell.empty().append($("<input type='text' value='"+tmp+"' />").keydown(function(evt){
-						if(evt.keyCode==13){
-							cell.empty().text(evt.target.value);
-						};
-					})).children().focusout(function(evt){
-						cell.empty().text(evt.target.value);
+					var cell = $(this).attr("contenteditable", "true");
+					cell.focusout(function(){
+						cell.attr("contenteditable", "false");
 					}).focus();
 				}).clone(true);
 			};
@@ -44,7 +39,10 @@ yepnope({
 			app.addRow = function(){
 				var numRows = $("tr").length;
 				var numCols = $("thead th").length;
-				newRow = $("<tr>").append("<th>" + numRows++ + "</th>");
+				var newRow = $("<tr>").append($("<th>" + numRows++ + "</th>").click(function(){
+					$(".selected").removeClass("selected");
+					$(this).addClass("selected").siblings().addClass("selected");
+				}));
 				for(var j = 1; j < numCols; j++){
 					newRow.append(app.newCell());
 				}
@@ -75,24 +73,41 @@ yepnope({
 					app.addCol();
 				}
 			}).keydown(function(evt){
-				var cell = $("td.selected");
+				var cell = $(".selected:first");
 				switch(evt.keyCode){
 					case 34:
 						for(var i=0; i < 30; i++){
 							app.addRow();
 						}
 					break;
+					case 37: //Left
+						evt.preventDefault();
+						$(".selected").removeClass("selected");
+						cell.prev().addClass("selected");
+					break;
+					case 38: //Up
+						evt.preventDefault();
+						$(".selected").removeClass("selected");
+						var sib = cell.prevAll().length;
+						$(cell.parent().prev().children()[sib]).addClass("selected");
+					break;
+					case 39: //Right
+						evt.preventDefault();
+						$(".selected").removeClass("selected");
+						cell.next().addClass("selected");
+					break;
+					case 40: //Down
+						evt.preventDefault();
+						$(".selected").removeClass("selected");
+						var sib = cell.prevAll().length;
+						$(cell.parent().next().children()[sib]).addClass("selected");						
 					case 113:
 						if(cell.length>0){
-							var extant = cell.text();
-							cell.empty().append($("<input type='text' value='" + extant + "' />").keydown(function(evt){
-							if(evt.keyCode==13){
-								cell.empty().text(evt.target.value);
-							};
-							})).children().focus();
-							cell.children().focusout(function(evt){
-								cell.empty().text(evt.target.value);
-							});
+							if(cell.attr("contenteditable")!="false"){
+								cell.attr("contenteditable", "false");	
+							} else {
+								cell.attr("contenteditable", "true").focus();
+							}
 						}
 					break;
 				}
@@ -102,10 +117,15 @@ yepnope({
 	},
 	complete : function() {
 		$("#new").button().click(function(){
-			$("<div title='Please Confirm'>Are you certain you want to close the current spreadsheet and create a new one?</div>").dialog({
+			$("#newcontent").dialog({
 				buttons: {
 					"Yes": function(){
-						location.reload();
+						$("table").fadeOut(400, function(){
+							$(".selected").removeClass("selected");
+							$("td").text("");
+							$("table").fadeIn();
+						});
+						$(this).dialog("close");
 					},
 					Cancel: function(){
 						$(this).dialog("close");
@@ -135,15 +155,14 @@ yepnope({
 			table.find("tbody > tr").each(function(ind, el) {
 				row = [];
 				$(el).find("td").each(function(i, cell) {
-					if (_.isEmpty($(cell).find(":input"))) {
-						row.push($(cell).text());
-					} else {
-						row.push($(cell).find(":input").val());
-					}
+					row.push($(cell).text());
 				});
-				csv += row.join(",") + "\r\n";
+				csv += row.join(",") + "\n";
 			});
-			$(this).attr("href", "data:text/csv;charset=utf8," + encodeURI(csv));
+			$(this).attr({
+				"href": "data:text/csv;charset=utf8," + encodeURI(csv),
+				"download": $("#filename").text()
+			});
 		});
 		$("#github").button();
 		$("#about").button().click(function(){
