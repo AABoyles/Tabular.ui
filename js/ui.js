@@ -101,6 +101,18 @@ yepnope({
 		}
 	},
 	complete : function() {
+		$("#new").button().click(function(){
+			$("<div title='Please Confirm'>Are you certain you want to close the current spreadsheet and create a new one?</div>").dialog({
+				buttons: {
+					"Yes": function(){
+						location.reload();
+					},
+					Cancel: function(){
+						$(this).dialog("close");
+					}
+				}
+			});
+		});
 		$("#upload").button().click(function(){
 			$("#uploadcontent").dialog({
 				buttons: {
