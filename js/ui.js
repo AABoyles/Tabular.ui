@@ -6,7 +6,8 @@ var app = {
 	newCell: {},
 	spinner: {},
 	addRow: function(){},
-	addCol: function(){}
+	addCol: function(){},
+	dragCell: {}
 };
 
 yepnope({
@@ -25,8 +26,22 @@ yepnope({
 		},
 		"jquery-2.1.0.min.js": function(){
 			app.newCell = function(){
-				return $("<td>").click(function(){
+				return $("<td>").mousedown(function(evt){
+					evt.preventDefault();
 					$(".selected").removeClass("selected");
+					app.dragCell = $(this);
+					$("tbody tr td, th").mousemove(function(){
+						$(".selected").removeClass("selected");
+						var a = app.dragCell.prevAll().length,
+						    b = $(this).prevAll().length,
+						    c = app.dragCell.parent().prevAll().length,
+						    d = $(this).parent().prevAll().length;
+						$("tbody tr").slice(Math.min(c,d),Math.max(c,d)+1).each(function(i, row){
+							$(row).children().slice(Math.min(a,b),Math.max(a,b)+1).addClass("selected");
+						});
+					});
+				}).mouseup(function(){
+					$("tbody tr td, th").unbind("mousemove");
 					$(this).addClass("selected");
 				}).dblclick(function(){
 					var cell = $(this).attr("contenteditable", "true");
@@ -75,10 +90,8 @@ yepnope({
 			}).keydown(function(evt){
 				var cell = $(".selected:first");
 				switch(evt.keyCode){
-					case 34:
-						for(var i=0; i < 30; i++){
-							app.addRow();
-						}
+					case 34: //PageDown
+						for(var i=0; i <= 30; i++){ app.addRow(); }
 					break;
 					case 37: //Left
 						evt.preventDefault();
@@ -101,7 +114,7 @@ yepnope({
 						$(".selected").removeClass("selected");
 						var sib = cell.prevAll().length;
 						$(cell.parent().next().children()[sib]).addClass("selected");						
-					case 113:
+					case 113: //F2
 						if(cell.length>0){
 							if(cell.attr("contenteditable")!="false"){
 								cell.attr("contenteditable", "false");	
