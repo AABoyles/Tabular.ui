@@ -107,6 +107,6 @@ footer a {
 footer a:hover {
 	color: #0000FF;
 }
-#aboutcontent, #uploadcontent {
+#newcontent, #uploadcontent, #aboutcontent {
 	display: none;
 }
