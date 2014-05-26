@@ -45,17 +45,17 @@ yepnope({
 					$(".selected").removeClass("selected");
 				}).mouseup(function(){
 					$("tbody tr td, th").unbind("mousemove");
-					$(this).addClass("selected");
+					$(this).addClass("selected").focus();
 				}).dblclick(function(){
-					var cell = $(this).attr("contenteditable", "true");
-					cell.focusout(function(){
-						cell.attr("contenteditable", "false");
-					}).focus();
+					$(this).attr("contenteditable", "true").focus();
+				}).focusout(function(){
+					$(this).attr("contenteditable", "false");
 				});
 				return cell;
 			};
 
 			app.addRows = function(rows){
+				rows = (typeof rows === "undefined") ? 1 : rows;
 				var tbody = $("tbody");
 				var cols = $("thead th").length;
 				var extantRows = $("tr").length;
@@ -71,9 +71,7 @@ yepnope({
 				}
 			};
 
-			app.addRow = function(){
-				app.addRows(1);
-			};
+			app.addRow = app.addRows;
 
 			app.addCols = function(cols){
 				cols = (typeof cols === "undefined") ? 1 : cols;
@@ -93,9 +91,7 @@ yepnope({
 				});
 			};
 			
-			app.addCol = function(){
-				app.addCols(1);
-			};
+			app.addCol = app.addCols();
 
 			app.emptyTable = function(){
 				$("thead").html("<tr><th></th></tr>");
@@ -161,6 +157,9 @@ yepnope({
 					break;
 				}
 			});
+			$("legend").click(function(){
+				$("#advanced-import-options-wrapper").slideToggle();
+			});
 		},
 		"jqueryui.min.js": function(){
 			$("#new").button().click(function(){
@@ -201,28 +200,48 @@ yepnope({
 			});
 		},
 		"Tabular.js": function(){
-			$("#uploadfile").change(function(){
-				var reader = new FileReader();
-				reader.onloadend = function(){
-					app.csv = reader.result;
-					app.data = tabular.parse(app.csv);
-				};
-				reader.readAsText($(this).get(0).files[0]);
-			});
+			app.reader = new FileReader();
+			app.reader.onloadend = function(){
+				tabular.IGNORE_QUOTES = !($("#quoted").is(":checked"));
+				QUOTE = $("#quotechar").val();
+				COMMA = $("#delimiter").val();
+				app.csv = app.reader.result;
+				app.data = tabular.parse(app.csv);
+				return app.data;
+			};
+
 			$("#upload").button().click(function(){
 				$("#uploadcontent").dialog({
 					buttons: {
 						"Let's edit this puppy!": function(){
-							$("#filename").text($("#uploadfile").get(0).files[0].name);
-							app.spinner.spin($("body")[0]);
+							var file = $("#uploadfile").get(0).files[0];
+							app.reader.readAsText(file);
+							$("#filename").text(file.name);
+							app.spinner.spin($("body").get(0));
 							$("table").fadeOut(400, function(){
-								app.addCols(app.data[0].length - $("thead th").length);
+								if($("#filecap").is(":checked")){
+									app.emptyTable();
+								}
 								var rows = $("tbody tr");
 								app.addRows(app.data.length - rows.length);
-								for(var y = 0; y < app.data.length; y++){
-									var row = $(rows.get(y)).children();
-									for(var x = 0; x < app.data[y].length; x++){
-										$(row.get(x)).text(app.data[y][x]);
+								app.addCols(app.data[0].length - $("thead th").length);
+								if($("#headers").is(":checked")){
+									var row = $("thead th");
+									for(var x = 1; x <= app.data[0].length; x++){
+										$(row.get(x)).text(app.data[0][x-1]);
+									}
+									for(var y = 0; y < app.data.length-1; y++){
+										var row = $(rows.get(y)).children();
+										for(var x = 1; x <= app.data[y].length; x++){
+											$(row.get(x)).text(app.data[y+1][x-1]);
+										}
+									}
+								} else {
+									for(var y = 0; y < app.data.length; y++){
+										var row = $(rows.get(y)).children();
+										for(var x = 1; x <= app.data[y].length; x++){
+											$(row.get(x)).text(app.data[y][x-1]);
+										}
 									}
 								}
 								$(this).fadeIn(400, function(){
