@@ -33,6 +33,16 @@
 		<div id='newcontent' title='Please Confirm'>Are you certain you want to close the current spreadsheet and create a new one?</div>
 		<div id="uploadcontent" title="Upload">
 			<input id="uploadfile" type="file" accept="text/csv" />
+			<fieldset id="advanced-import-options">
+				<legend>Advanced</legend>
+				<div id="advanced-import-options-wrapper">
+					<label for="delimiter">Delimiter</label><input id="delimiter" type="text" minlength="1" value="," placeholder="Delimiter" /><br />
+					<input id="headers" type="checkbox" /><label for="headers">My data has headers</label><br />
+					<input id="quoted" type="checkbox" /><label for="quoted">My text cells are quoted</label><br />
+					<label for="quotechar">Quote Character</label><input id="quotechar" type="text" maxlength="1" value='"' /><br />
+					<input id="filecap" type="checkbox" /><label for="filecap">Restrict Table to file dimensions</label><br />
+				</div>
+			</fieldset>
 		</div>
 		<div id="aboutcontent" title="About Tabular">
 			<a href="http://github.com/aaboyles/Tabular.ui" style="font-size: 2em" target="_blank">Tabular</a> v.0.1.0 by <a href="http://aaboyles.com/" target="_blank">Tony Boyles</a>

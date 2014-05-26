@@ -41,6 +41,13 @@ header {
 #new, #upload, #download, #github, #about {
 	margin: 7px;
 }
+#advanced-import-options-wrapper{
+	display:none;
+}
+legend:hover{
+	color:#0000FF;
+	cursor: pointer;
+}
 #content {
 	display: none;
 	min-width: 100%;
@@ -49,8 +56,6 @@ header {
 }
 table {
 	border-collapse: collapse;
-	min-width: 150%;
-	min-height: 150%;
 }
 th {
 	background: #f2f5f6;
